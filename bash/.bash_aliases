@@ -1,4 +1,3 @@
-alias llr='ls -lrt'
 alias la='ls -A'
 alias l='ls -CF'
 alias bcat='batcat --paging=never'
@@ -119,7 +118,7 @@ alias gcu='git reset --soft HEAD~'
 
 
 ## Misc
-alias tracert="traceroute"
+alias tracert="traceroute -I"
 alias mip="ip --br a"
 alias mpip="echo $(wget -qO- https://ipecho.net/plain)"
 
