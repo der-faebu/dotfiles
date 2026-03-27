@@ -28,13 +28,15 @@ autoload -U colors && colors
 
 
 # cmp opts
-zstyle ':completion:*' menu select # tab opens cmp menu
+# zstyle ':completion:*' menu select # tab opens cmp menu
 zstyle ':completion:*' special-dirs true # force . and .. to show in cmp menu
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} ma=0\;33 # colorize cmp menu
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' # case insensitive matching
-# zstyle ':completion:*' file-list true # more detailed list
 zstyle ':completion:*' squeeze-slashes false # explicit disable to allow /*/ expansion
+zstyle ':completion:*' menu no
 
+zstyle 'fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+zstyle 'fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 # main opts
 # on exit, history appends rather than overwrites; history is appended as soon as cmds executed; history shared across sessions
 setopt auto_menu menu_complete # autocmp first menu match
@@ -137,28 +139,60 @@ tssh() {
 fi
 
 
-# if [ $(command -v oh-my-posh) ]; then
-#   # workaround... oh-my-post works with source .bashrc, but not at startup
-#   eval "$(oh-my-posh init $MY_SHELL --config $HOME/.config/poshthemes/velvet.omp.json)"
-# fi
+if [ $(command -v oh-my-posh) ]; then
+  # workaround... oh-my-post works with source .bashrc, but not at startup
+  eval "$(oh-my-posh init $MY_SHELL --config $HOME/.config/poshthemes/velvet.omp.json)"
+fi
 
+# shell integrations
+eval "$(fzf --zsh)"
+eval "$(zoxide init --cmd cd zsh)"
 
+if [ $(uname) = "Darwin" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 ## zinit plugins
 
-# powerlevel 10k
-zinit ice depth=1; zinit light romkatv/powerlevel10k
+# Snippets (adds aliases under the hood)
+# Snippets can be https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins
+zinit snippet OMZP::git
+zinit snippet OMZP::sudo
+zinit snippet OMZP::docker
+zinit snippet OMZP::docker-compose
+zinit snippet OMZP::command-not-found
+
+#powerlevel 10k
+# disabled as it does not behave with tmux and we've got oh-my-posh
+# zinit ice depth=1; zinit light romkatv/powerlevel10k
+
 
 # install plugins
 # syntax highlighting, autosuggestions, autocompletions
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-completions
+zinit light Aloxaf/fzf-tab
+
 
 # load completions
 autoload -U compinit && compinit
-
+# replay cache completions
+zinit cdreplay -q
+#
 # Keybindings
 bindkey '^g' autosuggest-accept
 
-# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
-[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+
+if command -v tmux >/dev/null 2>&1; then
+    if [ -z "$TMUX" ]; then
+        tmux has-session -t TMUX 2>/dev/null \
+            && tmux attach -t TMUX \
+            || tmux new -s TMUX
+    fi
+fi
+
+# # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+# [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+
+# start ssh-agent
+eval "$(ssh-agent)"
