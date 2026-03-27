@@ -88,7 +88,9 @@ kns() {
 #functions
 
 ## Yazi
-alias yazi="flatpak run io.github.sxyazi.yazi"
+if [ $(uname) != 'Darwin' ]; then
+  alias yazi="flatpak run io.github.sxyazi.yazi"
+fi
 #
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
