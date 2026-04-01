@@ -1,4 +1,0 @@
-tmux/.tmux/plugins/tmux
-.zsh_sessions/
-*.swp
-zsh/.config/zsh/.zcompdump*

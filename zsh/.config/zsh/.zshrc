@@ -2,6 +2,14 @@
 # env are defined in in ~/.zprofile
 # This file is read second after ~/.zshenv
 
+# shell integrations
+eval "$(fzf --zsh)"
+eval "$(zoxide init --cmd cd zsh)"
+
+if [ $(uname) = "Darwin" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # source global shell alias & variables files
 if [ -f "$HOME/.bash_aliases" ]; then
   source "$HOME/.bash_aliases"
@@ -11,13 +19,10 @@ fi
 
 [ -f "$ZDOTDIR/fzs-bindings.zsh" ] && source "$ZDOTDIR/fzs-bindings.zsh"
 
-# [ -f "$XDG_CONFIG_HOME/shell/vars" ] && source "$XDG_CONFIG_HOME/shell/vars"
-
 # load modules
 zmodload zsh/complist
 autoload -U compinit && compinit
 autoload -U colors && colors
-
 
 # cmp opts
 zstyle ':completion:*' special-dirs true # force . and .. to show in cmp menu
@@ -58,23 +63,8 @@ setopt hist_find_no_dups
 # setopt SHARE_HISTORY unsetopt prompt_sp # don't autoclean blanklines
 
 # fzf setup
-source <(fzf --zsh) # allow for fzf history widget
+# source <(fzf --zsh) # allow for fzf history widget
 
-# binds
-# vim covered bindings are commented out
-# so are bindings used by tmux
-
-# bindkey "^a" beginning-of-line
-# bindkey "^e" end-of-line
-# bindkey "^k" kill-line
-# bindkey "^j" backward-word
-# bindkey "^k" forward-word
-# bindkey "^H" backward-kill-word
-# ctrl J & K for going up and down in prev commands
-# used by tmux. somehow redundant if fzf-history is used
-# bindkey "^J" history-search-forward
-bindkey "^K" history-search-backward
-bindkey '^R' fzf-history-widget
 
 
 # open fff file manager with ctrl f
@@ -83,25 +73,11 @@ bindkey '^R' fzf-history-widget
 #  zle redisplay
 #}
 #zle -N openfff
-#bindkey '^f' openfff
+# bindkey '^f' openfff
 
 
 # set up prompt
 NEWLINE=$'\n'
-# PROMPT="${NEWLINE}%K{#2E3440}%F{#E5E9F0}$(date +%_I:%M%P) %K{#3b4252}%F{#ECEFF4} %n %K{#4c566a} %~ %f%k ❯ " # nord theme
-# PROMPT="${NEWLINE}%K{#32302f}%F{#d5c4a1} $0 %K{#3c3836}%F{#d5c4a1} %n %K{#504945} %~ %f%k ❯ " # warmer theme
-# PROMPT="${NEWLINE}%K{$COL0}%F{$COL1}$(date +%_I:%M%P) %K{$COL0}%F{$COL2} %n %K{$COL3} %~ %f%k ❯ " # pywal colors, from postrun script
-
-# echo -e "${NEWLINE}\033[48;2;46;52;64;38;2;216;222;233m $0 \033[0m\033[48;2;59;66;82;38;2;216;222;233m $(uptime -p | cut -c 4-) \033[0m\033[48;2;76;86;106;38;2;216;222;233m $(uname -r) \033[0m" # nord theme
-# echo -e "${NEWLINE}\x1b[38;5;137m\x1b[48;5;0m it's$(date +%_I:%M%P) \x1b[38;5;180m\x1b[48;5;0m $(uptime -p | cut -c 4-) \x1b[38;5;223m\x1b[48;5;0m $(uname -r) \033[0m" # warmer theme
-# echo -e "${NEWLINE}\x1b[38;5;137m\x1b[48;5;0m it's$(print -P '%D{%_I:%M%P}\n') \x1b[38;5;180m\x1b[48;5;0m $(uptime | cut -c 4-) \x1b[38;5;223m\x1b[48;5;0m $(uname -r) \033[0m" # current
-
-# autosuggestions
-# requires zsh-autosuggestions
-# source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# syntax highlighting
-# requires zsh-syntax-highlighting package
 
 MY_SHELL=$(echo $SHELL | awk -F '/' '{print $3}')
 
@@ -130,19 +106,6 @@ tssh() {
   [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
 fi
 
-
-# if [ $(command -v oh-my-posh) ]; then
-#   # workaround... oh-my-post works with source .bashrc, but not at startup
-#   eval "$(oh-my-posh init $MY_SHELL --config $HOME/.config/poshthemes/velvet.omp.json)"
-# fi
-
-# shell integrations
-eval "$(fzf --zsh)"
-eval "$(zoxide init --cmd cd zsh)"
-
-if [ $(uname) = "Darwin" ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
 ## zinit plugins
 
 # Snippets (adds aliases under the hood)
@@ -268,12 +231,12 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='nvim'
-# fi
+Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='nvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
@@ -296,4 +259,56 @@ source $ZSH/oh-my-zsh.sh
 
 
 # start ssh-agent
-eval "$(ssh-agent)"
+SSH_ENV="$HOME/.ssh/agent-environment"
+
+function start_agent {
+    echo "Initialising new SSH agent..."
+    ssh-agent | sed 's/^echo/#echo/' >"$SSH_ENV"
+    echo succeeded
+    chmod 600 "$SSH_ENV"
+    . "$SSH_ENV" >/dev/null
+    ssh-add; 
+}
+
+# Source SSH settings, if applicable
+
+if [ -f "$SSH_ENV" ]; then
+    . "$SSH_ENV" >/dev/null
+    #ps $SSH_AGENT_PID doesn't work under Cygwin
+    ps -ef | grep $SSH_AGENT_PID | grep ssh-agent$ >/dev/null || {
+        start_agent
+    } 
+else
+    start_agent 
+fi
+# end ssh agent
+
+# QEMU
+if [[ $(command -v kvm) ]]; then
+  export LIBVIRT_DEFAULT_URI="qemu:///system"
+fi
+
+# opencode
+export PATH=/home/gfa/.opencode/bin:$PATH
+
+# activate vim motions
+bindkey -v
+
+# Key bindings
+# This section should reside at the bottom of zshrc for nothing to get overwritten.
+
+# vim covered bindings are commented out
+# so are bindings used by tmux
+
+# bindkey "^a" beginning-of-line
+# bindkey "^e" end-of-line
+# bindkey "^k" kill-line
+# bindkey "^j" backward-word
+# bindkey "^k" forward-word
+# bindkey "^H" backward-kill-word
+# ctrl J & K for going up and down in prev commands
+#
+# used by tmux. somehow redundant if fzf-history is used
+# bindkey "^J" history-search-forward
+bindkey "^K" history-search-backward
+bindkey '^R' fzf-history-widget
