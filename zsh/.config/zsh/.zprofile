@@ -48,10 +48,4 @@ export FZF_DEFAULT_OPTS="--style minimal --color 16 --layout=reverse --height 30
 export FZF_CTRL_R_OPTS="--style minimal --color 16 --info inline --no-sort --no-preview" # separate opts for history widget
 export MANPAGER="less -R --use-color -Dd+r -Du+b" # colored man pages
 
-# Set zshinit env variables
-export ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-
-source "${ZINIT_HOME}/zinit.zsh"
 

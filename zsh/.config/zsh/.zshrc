@@ -106,6 +106,13 @@ tssh() {
   [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
 fi
 
+## zinit setup
+
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
+
 ## zinit plugins
 
 # Snippets (adds aliases under the hood)
@@ -153,6 +160,10 @@ fi
 
 # Path to your Oh My Zsh installation.
 export ZSH="$ZDOTDIR/ohmyzsh"
+
+if [[ ! -d $ZSH/themes/nord-extended ]]; then
+    git clone https://github.com/fxbrit/nord-extended $ZSH/themes/nord-extended
+fi
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
@@ -231,7 +242,7 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-Preferred editor for local and remote sessions
+# Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
@@ -312,3 +323,17 @@ bindkey -v
 # bindkey "^J" history-search-forward
 bindkey "^K" history-search-backward
 bindkey '^R' fzf-history-widget
+
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
+fi
+
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+### End of Zinit's installer chunk
