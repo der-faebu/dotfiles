@@ -11,10 +11,10 @@ if [ $(uname) = "Darwin" ]; then
 fi
 
 # source global shell alias & variables files
-if [ -f "$HOME/.bash_aliases" ]; then
-  source "$HOME/.bash_aliases"
+if [ -f "$HOME/.shell_aliases" ]; then
+  source "$HOME/.shell_aliases"
 else
-  echo "bash_alias not found"
+  echo "shell_alias not found"
 fi
 
 [ -f "$ZDOTDIR/fzs-bindings.zsh" ] && source "$ZDOTDIR/fzs-bindings.zsh"
