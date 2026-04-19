@@ -5,13 +5,13 @@
 # shell integrations
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
+eval $(thefuck --alias) 
 
 if [ $(uname) = "Darwin" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-
-[ -f "$ZDOTDIR/fzs-bindings.zsh" ] && source "$ZDOTDIR/fzs-bindings.zsh"
+[[ -f "$ZDOTDIR/fzs-bindings.zsh" ]] && source "$ZDOTDIR/fzs-bindings.zsh"
 
 
 # load modules
@@ -46,6 +46,7 @@ SAVEHIST=$HISTSIZE
 HISTDUP=erase
 HISTFILE="$XDG_CACHE_HOME/zsh_history" # move histfile to cache
 HISTCONTROL=ignoreboth # consecutive duplicates & commands starting with space are not saved
+
 setopt appendhistory 
 setopt sharehistory
 setopt hist_ignore_space
@@ -85,10 +86,10 @@ export PATH="$PATH:/home/gfa/.lmstudio/bin"
 # End of LM Studio CLI section
 
 # Homebrew shennanignans
-if [ $(command -v brew) ]; then
+if [[ $(command -v brew) ]]; then
   HOMEBREW_PREFIX="$(brew --prefix)"
   set rtp+=$HOMEBREW_PREFIX/opt/fzf
-  [ -d "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting" ] && source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+  [[ -d "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting" ]] && source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
 
 
@@ -98,14 +99,14 @@ tssh() {
   command ssh "$@"
   tmux set-window-option automatic-rename "on" 1>/dev/null
  }
-  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
+  [[ ! $TERM =~ screen ]] && [[ -z $TMUX ]] && exec tmux
 fi
 
 ## zinit setup
 
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+[[ ! -d $ZINIT_HOME ]] && mkdir -p "$(dirname $ZINIT_HOME)"
+[[ ! -d $ZINIT_HOME/.git ]] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
 
 ## zinit plugins
@@ -138,7 +139,7 @@ bindkey '^g' autosuggest-accept
 
 
 if command -v tmux >/dev/null 2>&1; then
-    if [ -z "$TMUX" ]; then
+    if [[ -z "$TMUX" ]]; then
         tmux has-session -t TMUX 2>/dev/null \
             && tmux attach -t TMUX \
             || tmux new -s TMUX
@@ -278,7 +279,7 @@ function start_agent {
 
 # Source SSH settings, if applicable
 
-if [ -f "$SSH_ENV" ]; then
+if [[ -f "$SSH_ENV" ]]; then
     . "$SSH_ENV" >/dev/null
     #ps $SSH_AGENT_PID doesn't work under Cygwin
     ps -ef | grep $SSH_AGENT_PID | grep ssh-agent$ >/dev/null || {
@@ -334,7 +335,7 @@ autoload -Uz _zinit
 ### End of Zinit's installer chunk
 #
 # source global shell alias & variables files
-if [ -f "$HOME/.shell_aliases" ]; then
+if [[ -f "$HOME/.shell_aliases" ]]; then
   source "$HOME/.shell_aliases"
 else
   echo "shell_alias not found"
