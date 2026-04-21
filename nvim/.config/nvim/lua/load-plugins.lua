@@ -76,10 +76,10 @@ return require("packer").startup(function(use)
 
     use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
 
-	-- use({
-	-- 	"nvim-telescope/telescope-fzf-native.nvim",
-	-- 	run = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
-	-- })
+	use({
+		"nvim-telescope/telescope-fzf-native.nvim",
+		run = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+	})
     use {
       'aspeddro/pandoc.nvim',
       config = function()
