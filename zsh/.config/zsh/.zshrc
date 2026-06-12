@@ -301,6 +301,16 @@ export PATH=/home/gfa/.opencode/bin:$PATH
 # activate vim motions
 bindkey -v
 
+# Sway variable for TMUX
+if [[ -v TMUX ]]; then
+#    inside tmux, we don't know if Sway got restarted
+    swaymsg(){
+        export SWAYSOCK=$XDG_RUNTIME_DIR/sway-ipc.$UID.$(pgrep -x sway).sock
+        command swaymsg "$@"
+    }
+fi
+
+
 # Key bindings
 # This section should reside at the bottom of zshrc for nothing to get overwritten.
 
