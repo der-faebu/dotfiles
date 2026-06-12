@@ -18,6 +18,9 @@ return require("packer").startup(function(use)
 	use("lewis6991/gitsigns.nvim")
 	use("christoomey/vim-tmux-navigator")
 
+
+	use("3rd/image.nvim")
+
 	use({
 		"epwalsh/obsidian.nvim",
 		tag = "*", -- recommended, use latest release instead of latest commit
