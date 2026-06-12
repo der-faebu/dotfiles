@@ -1,8 +1,3 @@
-#! /usr/bin/env bash
-
-alias la='ls -A'
-alias l='ls -CF'
-
 if [[ ! $(command -v  bat) ]]; then
 	alias bcat='batcat --paging=never'
 	alias bat='batcat --paging=never'
@@ -48,21 +43,27 @@ alias obsidian="cd $HOME/Obsidian"
 alias nc="cd $HOME/Nextcloud"
 
 # Alias's for multiple directory listing commands
-alias la='ls -Alh' # show hidden files
-alias ls='ls -aFh --color=always' # add colors and file type extensions
-alias lx='ls -lXBh' # sort by extension
-alias lk='ls -lSrh' # sort by size
-alias lc='ls -lcrh' # sort by change time
-alias lu='ls -lurh' # sort by access time
-alias lr='ls -lRh' # recursive ls
-alias lt='ls -ltrh' # sort by date
-alias lm='ls -alh |more' # pipe through 'more'
-alias lw='ls -xAh' # wide listing format
-alias ll='ls -Flstah' # long listing format
-alias llr='ls -Flsrtah' # long listing format
-alias labc='ls -lap' #alphabetical sort
+alias ls='ls -laFhp --color=always' # add colors and file type extensions
+alias la='ls -A' # show hidden files
+alias lx='ls -XB' # sort by extension
+alias lk='ls -Sr' # sort by size
+alias lc='ls -cr' # sort by change time
+alias lu='ls -ur' # sort by access time
+alias lr='ls -R' # recursive ls
+alias lt='ls -tr' # sort by date
+alias lm='ls -a |more' # pipe through 'more'
+alias lw='ls -xA' # wide listing format
+alias ll='ls -s' # long listing format, by name
+alias llf='ls -st' # long listing by access time
+alias llr='ls -srt' # long listing by access time, reversed
 alias lf="ls -l | egrep -v '^d'" # files only
 alias ldir="ls -l | egrep '^d'" # directories only
+
+alias la='ls -A'
+alias l='ls -CF'
+
+# Dig Alias's
+alias sdig="dig +short" 
 
 # docker alias
 alias dpurge='docker image rm $(docker image ls -q) && docker volume rm $(docker volume ls)' 
