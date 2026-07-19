@@ -130,19 +130,21 @@ alias mpip="echo $(wget -qO- https://ipecho.net/plain)"
 
 # Debian-specific
 
-if [[ $( grep -i '^ID=' /etc/os-release | sed 's/ID=//') == 'debian' ]]; then
-	echo 'Debian here. Applying Debian-sepecific aliases'
-  apt() {
-    command nala "$@"
-  }
-  sudo() {
-    if [ "$1" = "apt" ]; then
-      shift
-      command sudo nala "$@"
-    else
-      command sudo "$@"
-    fi
-  }
+if [[ $(uname) != 'Darwin'  ]]; then
+	if [[ $( grep -i '^ID=' /etc/os-release | sed 's/ID=//') == 'debian' ]]; then
+		echo 'Debian here. Applying Debian-sepecific aliases'
+	  apt() {
+	    command nala "$@"
+	  }
+	  sudo() {
+	    if [ "$1" = "apt" ]; then
+	      shift
+	      command sudo nala "$@"
+	    else
+	      command sudo "$@"
+	    fi
+	  }
+	fi
 fi
 
 # Bash-specific
