@@ -92,6 +92,11 @@ if [[ $(command -v brew) ]]; then
   [[ -d "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting" ]] && source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
 
+# add nvim to path
+
+if [[ -d "$HOME/nvim/bin" ]]; then
+  export PATH="$HOME/nvim/bin:$PATH"
+fi
 
 if command -v tmux>/dev/null; then
 tssh() {
