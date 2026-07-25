@@ -23,7 +23,7 @@ alias mkdir='mkdir -p'
 # alias ps='ps auxf'
 alias ping='ping -c 10'
 alias less='less -R'
-alias cls='clear'
+alias cls='clear -x'
 alias apt-get='sudo apt-get'
 alias multitail='multitail --no-repeat -c'
 
