@@ -153,6 +153,12 @@ fi
 # Zsh-specific
 
 #### coloured manpages ####
+# We put this here as we want it to run both on bash and zsh.
+# We need this in order for this to work
+# if it breaks on mac, only set it on linux
+
+export GROFF_NO_SGR=1
+
 # annotated by dave eddy (@yousuckatprogramming)
 # explained - https://youtu.be/D0sG2fj0G4Y
 # borrowed heavily from https://grml.org
