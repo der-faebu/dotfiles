@@ -124,8 +124,11 @@ alias gcu='git reset --soft HEAD~'
 ## Misc
 alias tracert="traceroute -I"
 alias mip="ip --br a"
-alias mpip="echo $(wget -qO- https://ipecho.net/plain)"
 
+function mpip(){
+  theip="$(wget -qO- https://ipecho.net/plain)"
+  echo "$theip"
+}
 # Mac-specific
 
 # Debian-specific
