@@ -26,7 +26,7 @@ alias less='less -R'
 alias cls='clear -x'
 alias apt-get='sudo apt-get'
 alias multitail='multitail --no-repeat -c'
-
+alias nmrestart='sudo systemctl restart NetworkManager'
 
 # Change directory aliases
 alias home='cd $HOME'
