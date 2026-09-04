@@ -22,6 +22,16 @@ export PYTHON_HISTORY="$XDG_DATA_HOME/python/history"
 # add scripts to path
 export PATH="$XDG_CONFIG_HOME/scripts:$PATH"
 
+# add cargo bin to path
+if [[ -d "$HOME/.local/share/cargo/bin" ]]; then
+  export PATH="$HOME/.local/share/cargo/bin:$PATH"
+fi
+
+# add claude code
+if [[ -d "$HOME/.local/bin" ]]; then
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
 # moving other files and some other vars
 export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
 export XPROFILE="$XDG_CONFIG_HOME/x11/xprofile"

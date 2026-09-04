@@ -31,6 +31,6 @@ if [ -d "$HOME/.cargo" ]; then
 fi
 
 # Added by LM Studio CLI (lms)
-export PATH="$PATH:/home/gfa/.lmstudio/bin"
+export PATH="$PATH:/$HOME/.lmstudio/bin"
 # End of LM Studio CLI section
 
