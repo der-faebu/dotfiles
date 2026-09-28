@@ -355,3 +355,6 @@ if [[ -f "$HOME/.shell_aliases" ]]; then
 else
   echo "shell_alias not found"
 fi
+
+test -e "${ZDOTDIR}/.iterm2_shell_integration.zsh" && source "${ZDOTDIR}/.iterm2_shell_integration.zsh"
+
