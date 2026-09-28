@@ -348,7 +348,7 @@ source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 ### End of Zinit's installer chunk
-#
+
 # source global shell alias & variables files
 if [[ -f "$HOME/.shell_aliases" ]]; then
   source "$HOME/.shell_aliases"
