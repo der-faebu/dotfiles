@@ -161,7 +161,11 @@ export PATH="$PATH:/home/gfa/.lmstudio/bin"
 export WINAPPS_SRC_DIR="$HOME/.local/bin/winapps-src"
 
 # use fzf for crtl+r
-source /usr/share/doc/fzf/examples/key-bindings.bash
+
+if [ -f /usr/share/doc/fzf/examples/key-bindings.bash ]; then
+  source /usr/share/doc/fzf/examples/key-bindings.bash
+fi
+
 eval $(thefuck --alias)
 
 # opencode
